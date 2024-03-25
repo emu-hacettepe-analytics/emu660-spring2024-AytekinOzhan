@@ -1,0 +1,53 @@
+---
+title: "About Me"
+styles:
+  styles.css
+sidebar: false
+---
+
+![](assets/images/aytekin_ozhan_fotograf.jpg){fig-align="center" width="200"}
+
+# Education
+
+-   B.S., Gazi University, Turkey, 2016 - 2021.
+-   M.S., Industrial Engineering, Hacettepe University, Turkey, 2022 - ongoing.
+
+# Resume
+
+[Click here to view my resume.](Aytekin_Ozhan_CV.pdf){.download-button}
+
+# Work Experience
+
+## Employements
+
+1.  TRMOTOR, Project Engineer, 2024 - ongoing.
+
+2.  Turkish Aerospace Industries, PLM Engineer, 2021 - 2024
+
+## Internships
+
+1.  Probiz Software, BPM Software Intern, 06.2021 - 08.2021
+
+2.  Turkish Aerospace Industries, Graduation Project Intern, 11.2020 - 06.2021
+
+3.  Turkish Aerospace Industries, Production Planning Intern, 06.2020 - 08.2020
+
+4.  Turkish Aerospace Industries, Candidate Engineer, 11.2019 - 03.2020
+
+# Projects
+
+1.  Graduation Project - Forecasting dynamic demands by using Machine Learning and Fuzzy Logic in TAI
+
+# Competencies
+
+R, Quarto, Git, Python, Latex, HTML, CSS
+
+# Hobbies
+
+1.  Reading novels and books about history, science, psychology, philosophy, economy, technology and programming
+
+2.  Playing piano
+
+3.  Playing and learning chess
+
+4.  Learning new stuff about technology and programming and apply these to create a product

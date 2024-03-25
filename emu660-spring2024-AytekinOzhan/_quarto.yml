@@ -1,0 +1,55 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "Aytekin's Analytics Lab"
+  navbar:
+    search: true
+    left:
+      - text: Home
+        href: index.qmd
+      - text: About Me
+        href: about.qmd
+      - text: My Posts
+        href: posts.qmd
+      - text: "EMU660 Coursework"
+        menu:
+          - text: Assignments
+            href: assignments.qmd
+          - text: Project
+            href: project.qmd
+            
+    tools:
+      - icon: github
+        href: https://github.com/AytekinOzhan
+      - icon: twitter
+        href: https://twitter.com/OzhnAytkn
+      - icon: linkedin
+        href: https://www.linkedin.com/in/aytekin-%C3%B6zhan-a8154b180/
+
+  sidebar:
+    - title: "Assignments"
+      style: "docked"
+      search: true
+      contents:
+        - assignments.qmd
+        - assignments/assignment-1.qmd
+        - assignments/assignment-2.qmd  
+  page-navigation: true
+  back-to-top-navigation: true
+  page-footer:
+    center: "Hacettepe IE - EMU660 - Spring 2024" 
+    border: true
+format:
+  html:
+    toc: true
+    toc-location: left
+    theme: 
+      light: simplex 
+      dark: cyborg
+    css: styles.css
+
+
+editor: visual
+
