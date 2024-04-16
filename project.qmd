@@ -1,57 +1,106 @@
 ---
-title: "Project X"
+title: "Turkey University Analysis"
+format:
+  html:
+    code-fold: true
+    code-summary: "Show the code"
 ---
 
-Welcome to my project page.
-
-Keep an eye on this space to stay updated with my project activities.
-
-(The titles below are provided as examples; please feel free to adjust them as necessary.)
+Welcome to my project page. In this page, you will see various information about my project. These include basic explanation about the YOK Atlas data (rows, columns, etc.), reason of choice of this data and finally some analysis with this data. Main aim in this project is to represent the status of universities in Turkey and examine many aspects of them.
 
 # 1. Project Overview and Scope
 
-xxxxxx
+This project is based on the universities in Turkey. Turkey has many universities but every one of them carry different attributes like scores, city, region, etc. We can clearly say that it is not possible to grasp all this information with the raw data only so this project will represent many aspect of this data. These aspects include basic statistical information, type of the university (Private or State), region, detailed information of the universities (the number of exchange students, assistant professor etc.) and so on. By this way, this all information can be seen visually, filtered and grasp easily.
 
 # 2. Data
 
-xxxxxx
+Data consists of three main titles: basic information of universities, score information (i.e. the number of exchange students), and department information.
+
+***a. Basic Information***
+
+Here you will see the first 10 rows of basic information of the universities:
+
+```{r}
+suppressPackageStartupMessages(library(thestats))
+library(thestats)
+library(knitr)
+
+kable(head(list_uni(), 10))
+```
+
+This data gives 6 information: id, name, type, city, region, and website of universities.
+
+***b. Numerical Information***
+
+This data shows many numerical attributes of the universities (205 columns). For the explanation about the attributes, reader can visit [here](https://github.com/analyticsresearchlab/thestats/blob/main/docs/Table3.md).
+
+```{r}
+suppressPackageStartupMessages(library(thestats))
+library(thestats)
+library(knitr)
+
+kable(head(list_score(department_names = "all"), 10))
+```
+
+***c. Department Information***
+
+This dataset contains information based on the department in the universities. These information contain id, year, type, program code, university name and faculty.
+
+```{r}
+suppressPackageStartupMessages(library(thestats))
+library(thestats)
+library(knitr)
+kable(head(list_dept(department_names = "all"), 10))
+```
 
 ## 2.1 Data Source
 
-xxxxxx
+This data is prepared by YOK and for analysis purposes, it is scraped and organized in an R package with the name [thestats](https://github.com/analyticsresearchlab/thestats). You can visit the link to learn more about it.
 
 ## 2.2 General Information About Data
 
-xxxxxx
+As shown above, data classified into three main titles: basic, score and department information. From these data, many summaries and knowledge can be extracted like the number of private and state universities based on the region, the number of universities that has the specific department like statistics from the department information data and so on.
+
+These data contain many columns and these columns can be examined in the given links above.
 
 ## 2.3 Reason of Choice
 
-xxxxxx
-
-## 2.4 Preprocessing
-
-xxxxxx
+Universities are so important for a country in many ways but this comes with a really serious problem: the number of universities in Turkey. This project's main aim is to analyse these all universities in many ways like total number of them, geographical (regional) based knowledge etc. After this analysis, reader can learn the student's various behavior about the universities. One of the most important thing is that people's ideas can change based on the geographical status of the university like department choice, university type, choice between the priority of university or department etc. For example, one student could want to study engineering but only can go to some universities in East. We can learn many detailed information quickly like in the example.
 
 # 3. Analysis
 
-xxxxxx
-
 ## 3.1 Exploratory Data Analysis
 
-xxxxxx
+```{r}
+suppressPackageStartupMessages(library(thestats))
+library(thestats)
+library(dplyr)
+library(ggplot2)
 
-## 3.2 Trend Analysis
+df <- list_uni() %>% count(type)
+private <- df[1, "n"]
+state <- df[2, "n"]
 
-xxxxxx
+cat("The number of universities in Turkey is", length(unique(list_uni()$university)), ".", private, "of them are Private and", state, "of them are State university.")
 
-## 3.3 Model Fitting
+```
 
-xxxxxx
+To see the number of universities based on the region, below chart will be helpful. As can be seen, the maximum number of universities is in Marmara region and continues with Central Anatolia, Black Sea etc. 
 
-## 3.4 Results
+```{r}
+suppressPackageStartupMessages(library(thestats))
+library(thestats)
+library(ggplot2)
 
-xxxxxx
+region_counts <- list_uni() %>%
+  group_by(region) %>%
+  summarize(num_universities = n_distinct(university))
 
-# 4. Results and Key Takeaways
+ggplot(region_counts, aes(x = region, y = num_universities)) +
+  geom_bar(stat = "identity", fill = "#ed4c07") +
+  labs(x = "Region", y = "Number of Universities") +
+  ggtitle("Number of Universities by Region") + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
 
-xxxxxx
+With the help of the above chart can say that for Marmara region and Central Anatolia, special attention should be taken because in these regions the number of students will be much more when compared with others. These actions include dormitories, libraries, social activities and such. 
