@@ -83,9 +83,35 @@ state <- df[2, "n"]
 
 cat("The number of universities in Turkey is", length(unique(list_uni()$university)), ".", private, "of them are Private and", state, "of them are State university.")
 
+cat("After learning the number of private and state universities, the distribution of the type of universities grouped by regions can be interesting to analyze.")
+
+private_uni <- list_uni()[list_uni()$type == "Private", ] %>%
+  group_by(region) %>%
+  summarize(num_universities = n_distinct(university))
+
+state_uni <- list_uni()[list_uni()$type == "State", ] %>%
+  group_by(region) %>%
+  summarize(num_universities = n_distinct(university))
+
+region_counts <- list_uni() %>%
+  group_by(region) %>%
+  summarize(num_universities = n_distinct(university))
+
+ggplot(private_uni, aes(x = region, y = num_universities)) +
+  geom_bar(stat = "identity", fill = "#ed4c07") +
+  labs(x = "Region", y = "Number of Private Universities") +
+  ggtitle("Number of Private Universities by Region") + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggplot(state_uni, aes(x = region, y = num_universities)) +
+  geom_bar(stat = "identity", fill = "blue") +
+  labs(x = "Region", y = "Number of State Universities") +
+  ggtitle("Number of State Universities by Region") + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
 ```
 
-To see the number of universities based on the region, below chart will be helpful. As can be seen, the maximum number of universities is in Marmara region and continues with Central Anatolia, Black Sea etc. 
+To see the number of universities based on the region, below chart will be helpful. As can be seen, the maximum number of universities is in Marmara region and continues with Central Anatolia, Black Sea etc.
 
 ```{r}
 suppressPackageStartupMessages(library(thestats))
@@ -103,4 +129,156 @@ ggplot(region_counts, aes(x = region, y = num_universities)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-With the help of the above chart can say that for Marmara region and Central Anatolia, special attention should be taken because in these regions the number of students will be much more when compared with others. These actions include dormitories, libraries, social activities and such. 
+With the help of the above chart can say that for Marmara region and Central Anatolia, special attention should be taken because in these regions the number of students will be much more when compared with others. These actions include dormitories, libraries, social activities and such.
+
+## 3.2 A Special Attention to Marmara Region
+
+A special attention is taken to Marmara and the top 20 faculties are shown above in the region. 
+
+```{r}
+
+library(knitr)
+
+faculty_group <- list_score(region_names = "Marmara", department_names = "all") %>% group_by(faculty) %>% 
+  summarize(num_faculties = length(faculty))
+
+faculty_numbers <- faculty_group[order(faculty_group$num_faculties, decreasing = TRUE),]
+
+kable(head(faculty_numbers, 20))
+```
+
+## 3.3 Students' Choice Order is Important
+
+Every student choices universities in a certain order and based on the point obtained in the university exam, they are accepted to the university. Below, I will explore the top 1st, 2nd and 3rd choice universities. This information can be interesting and helpful to other universities that seeks a way to develop and popularitiy or some other interesting results can be obtained from this analysis.
+
+```{r}
+
+library(knitr)
+
+sorted_1st_choice <- head(list_score(department_names = "all")[order(list_score(department_names = "all")$X141, decreasing = TRUE),], 10)
+row.names(sorted_1st_choice) <- NULL
+
+sorted_2nd_choice <- head(list_score(department_names = "all")[order(list_score(department_names = "all")$X142, decreasing = TRUE),], 10)
+row.names(sorted_2nd_choice) <- NULL
+
+sorted_3rd_choice <- head(list_score(department_names = "all")[order(list_score(department_names = "all")$X143, decreasing = TRUE),], 10)
+row.names(sorted_3rd_choice) <- NULL
+
+filter_exp_1 <- c("university", "faculty", "department", "X141")
+filter_exp_2 <- c("university", "faculty", "department", "X142")
+filter_exp_3 <- c("university", "faculty", "department", "X143")
+
+first_filtered <- sorted_1st_choice[filter_exp_1]
+colnames(first_filtered) <- c("university", "faculty", "department", "number_of_1st_choice")
+
+cat("1st Choice Universities: ")
+
+kable(first_filtered)
+
+second_filtered <- sorted_2nd_choice[filter_exp_2]
+colnames(second_filtered) <- c("university", "faculty", "department", "number_of_2nd_choice")
+
+cat("2nd Choice Universities: ")
+
+kable(second_filtered)
+
+
+third_filtered <- sorted_3rd_choice[filter_exp_3]
+colnames(third_filtered) <- c("university", "faculty", "department", "number_of_3rd_choice")
+
+cat("3rd Choice Universities: ")
+
+kable(third_filtered)
+```
+
+As can be seen above table, Anadolu University Distance Education is the first university for the 1st, 2nd and 3rd choice. For a more reliable analysis, Anadolu University Distance Education faculty is removed from the list and other universities examined.
+
+```{r}
+
+library(knitr)
+
+orig_data <- list_score(department_names = "all")
+anad_univ_removed <- orig_data[orig_data$university!="Anadolu University",]
+
+sorted_1st_choice <- head(anad_univ_removed[order(anad_univ_removed$X141, decreasing = TRUE),], 10)
+row.names(sorted_1st_choice) <- NULL
+
+sorted_2nd_choice <- head(anad_univ_removed[order(anad_univ_removed$X142, decreasing = TRUE),], 10)
+row.names(sorted_2nd_choice) <- NULL
+
+sorted_3rd_choice <- head(anad_univ_removed[order(anad_univ_removed$X143, decreasing = TRUE),], 10)
+row.names(sorted_3rd_choice) <- NULL
+
+filter_exp_1 <- c("university", "faculty", "department", "X141")
+filter_exp_2 <- c("university", "faculty", "department", "X142")
+filter_exp_3 <- c("university", "faculty", "department", "X143")
+
+first_filtered <- sorted_1st_choice[filter_exp_1]
+colnames(first_filtered) <- c("university", "faculty", "department", "number_of_1st_choice")
+
+cat("1st Choice Without Anadolu University: ")
+
+kable(first_filtered)
+
+second_filtered <- sorted_2nd_choice[filter_exp_2]
+colnames(second_filtered) <- c("university", "faculty", "department", "number_of_2nd_choice")
+
+cat("2nd Choice Without Anadolu University: ")
+
+kable(second_filtered)
+
+third_filtered <- sorted_3rd_choice[filter_exp_3]
+colnames(third_filtered) <- c("university", "faculty", "department", "number_of_3rd_choice")
+
+cat("3rd Choice Without Anadolu University: ")
+
+kable(third_filtered)
+```
+
+## 3.4 Highest Score of Placed Students
+
+Highest score of placed Students' plays an important role in the success and the popularitiy of the university. Below I will show an analysis about the most successful students' based on the university. By examining this, we will get a chance to learn the most successful universities in Turkey.
+
+```{r}
+
+library(knitr)
+
+orig_data <- list_score(department_names = "all")
+orig_data <- orig_data[orig_data$X16 != "---",]
+
+orig_data$X16 <- as.numeric(gsub(",", ".", orig_data$X16))
+
+highest_score_student <- orig_data %>%
+  group_by(university) %>%
+  summarize(average_score = mean(X16))
+
+kable(head(highest_score_student[order(highest_score_student$average_score, decreasing = TRUE),], 20))
+
+```
+
+## 3.5 Number of Professors in Universities
+
+While examining the status of a university, the number of professors and associate professors is so important. Professors are so experienced and students and other lecturers can learn so much information in a short time. By examining the numbers, we can contruct a relationship with the success and the popularity of the universities.
+
+```{r}
+
+library(knitr)
+
+orig_data <- list_score(department_names = "all")
+orig_data$prof_plus_assoc_prof <- orig_data$X188 + orig_data$X189
+
+highest_prof_num <- orig_data %>%
+  group_by(university) %>%
+  summarize(average_prof = mean(prof_plus_assoc_prof))
+
+kable(head(highest_prof_num[order(highest_prof_num$average_prof, decreasing = TRUE),], 10))
+
+cat("The Worst Universities Based on the Number of Professors and Associate Professors: ")
+
+kable(head(highest_prof_num[order(highest_prof_num$average_prof, decreasing = FALSE),], 10))
+
+```
+
+# 4 Results and Last Discussions
+
+Universities are so important in many aspects. Any doctor, engineer, teacher, lecturer etc. comes from these organisations. Analyzing the status of these is so helpful to understand many things at a first glance. This work is just a beginning of such a complete work. Data contains almost 200 different information and here the most important information is examined. Many organizations and regulations and much more can be done with these informations. I hope this small work helped to understand the different aspects of our universities.

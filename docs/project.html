@@ -180,7 +180,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#analysis" id="toc-analysis" class="nav-link" data-scroll-target="#analysis">3. Analysis</a>
   <ul class="collapse">
   <li><a href="#exploratory-data-analysis" id="toc-exploratory-data-analysis" class="nav-link" data-scroll-target="#exploratory-data-analysis">3.1 Exploratory Data Analysis</a></li>
+  <li><a href="#a-special-attention-to-marmara-region" id="toc-a-special-attention-to-marmara-region" class="nav-link" data-scroll-target="#a-special-attention-to-marmara-region">3.2 A Special Attention to Marmara Region</a></li>
+  <li><a href="#students-choice-order-is-important" id="toc-students-choice-order-is-important" class="nav-link" data-scroll-target="#students-choice-order-is-important">3.3 Students’ Choice Order is Important</a></li>
+  <li><a href="#highest-score-of-placed-students" id="toc-highest-score-of-placed-students" class="nav-link" data-scroll-target="#highest-score-of-placed-students">3.4 Highest Score of Placed Students</a></li>
+  <li><a href="#number-of-professors-in-universities" id="toc-number-of-professors-in-universities" class="nav-link" data-scroll-target="#number-of-professors-in-universities">3.5 Number of Professors in Universities</a></li>
   </ul></li>
+  <li><a href="#results-and-last-discussions" id="toc-results-and-last-discussions" class="nav-link" data-scroll-target="#results-and-last-discussions">4 Results and Last Discussions</a></li>
   </ul>
 </nav>
 </nav>
@@ -3025,24 +3030,73 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-stdout">
 <pre><code>The number of universities in Turkey is 198 . 73 of them are Private and 125 of them are State university.</code></pre>
 </div>
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"After learning the number of private and state universities, the distribution of the type of universities grouped by regions can be interesting to analyze."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>After learning the number of private and state universities, the distribution of the type of universities grouped by regions can be interesting to analyze.</code></pre>
+</div>
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>private_uni <span class="ot">&lt;-</span> <span class="fu">list_uni</span>()[<span class="fu">list_uni</span>()<span class="sc">$</span>type <span class="sc">==</span> <span class="st">"Private"</span>, ] <span class="sc">%&gt;%</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(region) <span class="sc">%&gt;%</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">num_universities =</span> <span class="fu">n_distinct</span>(university))</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>state_uni <span class="ot">&lt;-</span> <span class="fu">list_uni</span>()[<span class="fu">list_uni</span>()<span class="sc">$</span>type <span class="sc">==</span> <span class="st">"State"</span>, ] <span class="sc">%&gt;%</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(region) <span class="sc">%&gt;%</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">num_universities =</span> <span class="fu">n_distinct</span>(university))</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>region_counts <span class="ot">&lt;-</span> <span class="fu">list_uni</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(region) <span class="sc">%&gt;%</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">num_universities =</span> <span class="fu">n_distinct</span>(university))</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(private_uni, <span class="fu">aes</span>(<span class="at">x =</span> region, <span class="at">y =</span> num_universities)) <span class="sc">+</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">fill =</span> <span class="st">"#ed4c07"</span>) <span class="sc">+</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Region"</span>, <span class="at">y =</span> <span class="st">"Number of Private Universities"</span>) <span class="sc">+</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Number of Private Universities by Region"</span>) <span class="sc">+</span> </span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="project_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(state_uni, <span class="fu">aes</span>(<span class="at">x =</span> region, <span class="at">y =</span> num_universities)) <span class="sc">+</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">fill =</span> <span class="st">"blue"</span>) <span class="sc">+</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Region"</span>, <span class="at">y =</span> <span class="st">"Number of State Universities"</span>) <span class="sc">+</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Number of State Universities by Region"</span>) <span class="sc">+</span> </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="project_files/figure-html/unnamed-chunk-4-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
 </div>
 <p>To see the number of universities based on the region, below chart will be helpful. As can be seen, the maximum number of universities is in Marmara region and continues with Central Anatolia, Black Sea etc.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>(<span class="fu">library</span>(thestats))</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(thestats)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>region_counts <span class="ot">&lt;-</span> <span class="fu">list_uni</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(region) <span class="sc">%&gt;%</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">num_universities =</span> <span class="fu">n_distinct</span>(university))</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(region_counts, <span class="fu">aes</span>(<span class="at">x =</span> region, <span class="at">y =</span> num_universities)) <span class="sc">+</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">fill =</span> <span class="st">"#ed4c07"</span>) <span class="sc">+</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Region"</span>, <span class="at">y =</span> <span class="st">"Number of Universities"</span>) <span class="sc">+</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Number of Universities by Region"</span>) <span class="sc">+</span> </span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>(<span class="fu">library</span>(thestats))</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(thestats)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>region_counts <span class="ot">&lt;-</span> <span class="fu">list_uni</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(region) <span class="sc">%&gt;%</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">num_universities =</span> <span class="fu">n_distinct</span>(university))</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(region_counts, <span class="fu">aes</span>(<span class="at">x =</span> region, <span class="at">y =</span> num_universities)) <span class="sc">+</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">fill =</span> <span class="st">"#ed4c07"</span>) <span class="sc">+</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Region"</span>, <span class="at">y =</span> <span class="st">"Number of Universities"</span>) <span class="sc">+</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Number of Universities by Region"</span>) <span class="sc">+</span> </span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -3053,9 +3107,979 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>With the help of the above chart can say that for Marmara region and Central Anatolia, special attention should be taken because in these regions the number of students will be much more when compared with others. These actions include dormitories, libraries, social activities and such.</p>
-
-
 </section>
+<section id="a-special-attention-to-marmara-region" class="level2">
+<h2 class="anchored" data-anchor-id="a-special-attention-to-marmara-region">3.2 A Special Attention to Marmara Region</h2>
+<p>A special attention is taken to Marmara and the top 20 faculties are shown above in the region.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>faculty_group <span class="ot">&lt;-</span> <span class="fu">list_score</span>(<span class="at">region_names =</span> <span class="st">"Marmara"</span>, <span class="at">department_names =</span> <span class="st">"all"</span>) <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(faculty) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">num_faculties =</span> <span class="fu">length</span>(faculty))</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>faculty_numbers <span class="ot">&lt;-</span> faculty_group[<span class="fu">order</span>(faculty_group<span class="sc">$</span>num_faculties, <span class="at">decreasing =</span> <span class="cn">TRUE</span>),]</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(faculty_numbers, <span class="dv">20</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 80%">
+<col style="width: 19%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">faculty</th>
+<th style="text-align: right;">num_faculties</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Engineering faculty</td>
+<td style="text-align: right;">981</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Faculty of Health Sciences</td>
+<td style="text-align: right;">855</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Faculty of Arts and Sciences</td>
+<td style="text-align: right;">806</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Faculty of Economics and Administrative Sciences</td>
+<td style="text-align: right;">640</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Faculty of Education</td>
+<td style="text-align: right;">528</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Faculty of Economics, Administrative and Social Sciences</td>
+<td style="text-align: right;">512</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Faculty of Engineering and Natural Sciences</td>
+<td style="text-align: right;">464</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Communication faculty</td>
+<td style="text-align: right;">443</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Faculty of Engineering and Architecture</td>
+<td style="text-align: right;">355</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Faculty of Humanities and Social Sciences</td>
+<td style="text-align: right;">273</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Faculty of Management</td>
+<td style="text-align: right;">222</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Faculty of Literature</td>
+<td style="text-align: right;">221</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Faculty of Law</td>
+<td style="text-align: right;">214</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">School of Health Sciences</td>
+<td style="text-align: right;">211</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Medical School</td>
+<td style="text-align: right;">179</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Faculty of Business and Management Sciences</td>
+<td style="text-align: right;">166</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Faculty of Art and Design</td>
+<td style="text-align: right;">164</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Architecture and design faculty</td>
+<td style="text-align: right;">163</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Faculty of Architecture</td>
+<td style="text-align: right;">163</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Faculty of Dentistry</td>
+<td style="text-align: right;">132</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="students-choice-order-is-important" class="level2">
+<h2 class="anchored" data-anchor-id="students-choice-order-is-important">3.3 Students’ Choice Order is Important</h2>
+<p>Every student choices universities in a certain order and based on the point obtained in the university exam, they are accepted to the university. Below, I will explore the top 1st, 2nd and 3rd choice universities. This information can be interesting and helpful to other universities that seeks a way to develop and popularitiy or some other interesting results can be obtained from this analysis.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>sorted_1st_choice <span class="ot">&lt;-</span> <span class="fu">head</span>(<span class="fu">list_score</span>(<span class="at">department_names =</span> <span class="st">"all"</span>)[<span class="fu">order</span>(<span class="fu">list_score</span>(<span class="at">department_names =</span> <span class="st">"all"</span>)<span class="sc">$</span>X141, <span class="at">decreasing =</span> <span class="cn">TRUE</span>),], <span class="dv">10</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">row.names</span>(sorted_1st_choice) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>sorted_2nd_choice <span class="ot">&lt;-</span> <span class="fu">head</span>(<span class="fu">list_score</span>(<span class="at">department_names =</span> <span class="st">"all"</span>)[<span class="fu">order</span>(<span class="fu">list_score</span>(<span class="at">department_names =</span> <span class="st">"all"</span>)<span class="sc">$</span>X142, <span class="at">decreasing =</span> <span class="cn">TRUE</span>),], <span class="dv">10</span>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="fu">row.names</span>(sorted_2nd_choice) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>sorted_3rd_choice <span class="ot">&lt;-</span> <span class="fu">head</span>(<span class="fu">list_score</span>(<span class="at">department_names =</span> <span class="st">"all"</span>)[<span class="fu">order</span>(<span class="fu">list_score</span>(<span class="at">department_names =</span> <span class="st">"all"</span>)<span class="sc">$</span>X143, <span class="at">decreasing =</span> <span class="cn">TRUE</span>),], <span class="dv">10</span>)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="fu">row.names</span>(sorted_3rd_choice) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>filter_exp_1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"university"</span>, <span class="st">"faculty"</span>, <span class="st">"department"</span>, <span class="st">"X141"</span>)</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>filter_exp_2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"university"</span>, <span class="st">"faculty"</span>, <span class="st">"department"</span>, <span class="st">"X142"</span>)</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>filter_exp_3 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"university"</span>, <span class="st">"faculty"</span>, <span class="st">"department"</span>, <span class="st">"X143"</span>)</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>first_filtered <span class="ot">&lt;-</span> sorted_1st_choice[filter_exp_1]</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(first_filtered) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"university"</span>, <span class="st">"faculty"</span>, <span class="st">"department"</span>, <span class="st">"number_of_1st_choice"</span>)</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"1st Choice Universities: "</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>1st Choice Universities: </code></pre>
+</div>
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(first_filtered)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 25%">
+<col style="width: 39%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">university</th>
+<th style="text-align: left;">faculty</th>
+<th style="text-align: left;">department</th>
+<th style="text-align: right;">number_of_1st_choice</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Anadolu University</td>
+<td style="text-align: left;">Distance education faculty</td>
+<td style="text-align: left;">Public Relations and Advertising (Faculty) (Acikogretim)</td>
+<td style="text-align: right;">6468</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Istanbul Technical University</td>
+<td style="text-align: left;">Faculty of Computer and Informatics</td>
+<td style="text-align: left;">Artificial Intelligence and Data Engineering (English)</td>
+<td style="text-align: right;">5835</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Hacettepe University</td>
+<td style="text-align: left;">Engineering faculty</td>
+<td style="text-align: left;">Artificial Intelligence Engineering(English)</td>
+<td style="text-align: right;">4579</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ankara University</td>
+<td style="text-align: left;">Faculty of Law</td>
+<td style="text-align: left;">Law</td>
+<td style="text-align: right;">4435</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Anadolu University</td>
+<td style="text-align: left;">Distance education faculty</td>
+<td style="text-align: left;">Public Relations and Advertising (Acikogretim)</td>
+<td style="text-align: right;">4376</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Mugla Sitki Kocman University</td>
+<td style="text-align: left;">Faculty of Dentistry</td>
+<td style="text-align: left;">Dentist</td>
+<td style="text-align: right;">3365</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ankara University</td>
+<td style="text-align: left;">Faculty of Law</td>
+<td style="text-align: left;">Law</td>
+<td style="text-align: right;">3352</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ankara University</td>
+<td style="text-align: left;">Faculty of Law</td>
+<td style="text-align: left;">Law</td>
+<td style="text-align: right;">3258</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Anadolu University</td>
+<td style="text-align: left;">Distance education faculty</td>
+<td style="text-align: left;">Public Relations and Advertising (Acikogretim)</td>
+<td style="text-align: right;">3186</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Istanbul University</td>
+<td style="text-align: left;">Open and Distance Education Faculty</td>
+<td style="text-align: left;">Child Development (My Academia)</td>
+<td style="text-align: right;">2971</td>
+</tr>
+</tbody>
+</table>
+</div>
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>second_filtered <span class="ot">&lt;-</span> sorted_2nd_choice[filter_exp_2]</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(second_filtered) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"university"</span>, <span class="st">"faculty"</span>, <span class="st">"department"</span>, <span class="st">"number_of_2nd_choice"</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"2nd Choice Universities: "</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>2nd Choice Universities: </code></pre>
+</div>
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(second_filtered)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 21%">
+<col style="width: 45%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">university</th>
+<th style="text-align: left;">faculty</th>
+<th style="text-align: left;">department</th>
+<th style="text-align: right;">number_of_2nd_choice</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Anadolu University</td>
+<td style="text-align: left;">Distance education faculty</td>
+<td style="text-align: left;">History (My Academia)</td>
+<td style="text-align: right;">3085</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Anadolu University</td>
+<td style="text-align: left;">Distance education faculty</td>
+<td style="text-align: left;">History (My Academia)</td>
+<td style="text-align: right;">2575</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Anadolu University</td>
+<td style="text-align: left;">Distance education faculty</td>
+<td style="text-align: left;">Public Relations and Advertising (Faculty) (Acikogretim)</td>
+<td style="text-align: right;">2463</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Anadolu University</td>
+<td style="text-align: left;">Distance education faculty</td>
+<td style="text-align: left;">Turkish Language and Literature (Acikogretim)</td>
+<td style="text-align: right;">2364</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Istanbul University</td>
+<td style="text-align: left;">Faculty of Law</td>
+<td style="text-align: left;">Law</td>
+<td style="text-align: right;">2317</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ataturk University</td>
+<td style="text-align: left;">Distance education faculty</td>
+<td style="text-align: left;">Public Relations and Publicity (Acikogretim)</td>
+<td style="text-align: right;">2217</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Istanbul University</td>
+<td style="text-align: left;">Faculty of Law</td>
+<td style="text-align: left;">Law</td>
+<td style="text-align: right;">2174</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ataturk University</td>
+<td style="text-align: left;">Distance education faculty</td>
+<td style="text-align: left;">Public Relations and Publicity (Acikogretim)</td>
+<td style="text-align: right;">2162</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Yalova University</td>
+<td style="text-align: left;">Faculty of Health Sciences</td>
+<td style="text-align: left;">Nursing (Faculty)</td>
+<td style="text-align: right;">1998</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ataturk University</td>
+<td style="text-align: left;">Distance education faculty</td>
+<td style="text-align: left;">Child Development (My Academia)</td>
+<td style="text-align: right;">1936</td>
+</tr>
+</tbody>
+</table>
+</div>
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>third_filtered <span class="ot">&lt;-</span> sorted_3rd_choice[filter_exp_3]</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(third_filtered) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"university"</span>, <span class="st">"faculty"</span>, <span class="st">"department"</span>, <span class="st">"number_of_3rd_choice"</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"3rd Choice Universities: "</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>3rd Choice Universities: </code></pre>
+</div>
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(third_filtered)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 21%">
+<col style="width: 45%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">university</th>
+<th style="text-align: left;">faculty</th>
+<th style="text-align: left;">department</th>
+<th style="text-align: right;">number_of_3rd_choice</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Anadolu University</td>
+<td style="text-align: left;">Distance education faculty</td>
+<td style="text-align: left;">Turkish Language and Literature (Acikogretim)</td>
+<td style="text-align: right;">2433</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Anadolu University</td>
+<td style="text-align: left;">Distance education faculty</td>
+<td style="text-align: left;">History (My Academia)</td>
+<td style="text-align: right;">2341</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Anadolu University</td>
+<td style="text-align: left;">Distance education faculty</td>
+<td style="text-align: left;">Public Relations and Advertising (Faculty) (Acikogretim)</td>
+<td style="text-align: right;">2158</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Anadolu University</td>
+<td style="text-align: left;">Distance education faculty</td>
+<td style="text-align: left;">History (My Academia)</td>
+<td style="text-align: right;">1955</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Anadolu University</td>
+<td style="text-align: left;">Distance education faculty</td>
+<td style="text-align: left;">Turkish Language and Literature (Acikogretim)</td>
+<td style="text-align: right;">1914</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Marmara University</td>
+<td style="text-align: left;">Faculty of Law</td>
+<td style="text-align: left;">Law</td>
+<td style="text-align: right;">1745</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Anadolu University</td>
+<td style="text-align: left;">Distance education faculty</td>
+<td style="text-align: left;">Public Relations and Advertising (Acikogretim)</td>
+<td style="text-align: right;">1671</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Hacettepe University</td>
+<td style="text-align: left;">Faculty of Law</td>
+<td style="text-align: left;">Law</td>
+<td style="text-align: right;">1613</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Yalova University</td>
+<td style="text-align: left;">Faculty of Health Sciences</td>
+<td style="text-align: left;">Nursing (Faculty)</td>
+<td style="text-align: right;">1581</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Marmara University</td>
+<td style="text-align: left;">Faculty of Law</td>
+<td style="text-align: left;">Law</td>
+<td style="text-align: right;">1557</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>As can be seen above table, Anadolu University Distance Education is the first university for the 1st, 2nd and 3rd choice. For a more reliable analysis, Anadolu University Distance Education faculty is removed from the list and other universities examined.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>orig_data <span class="ot">&lt;-</span> <span class="fu">list_score</span>(<span class="at">department_names =</span> <span class="st">"all"</span>)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>anad_univ_removed <span class="ot">&lt;-</span> orig_data[orig_data<span class="sc">$</span>university<span class="sc">!=</span><span class="st">"Anadolu University"</span>,]</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>sorted_1st_choice <span class="ot">&lt;-</span> <span class="fu">head</span>(anad_univ_removed[<span class="fu">order</span>(anad_univ_removed<span class="sc">$</span>X141, <span class="at">decreasing =</span> <span class="cn">TRUE</span>),], <span class="dv">10</span>)</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="fu">row.names</span>(sorted_1st_choice) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>sorted_2nd_choice <span class="ot">&lt;-</span> <span class="fu">head</span>(anad_univ_removed[<span class="fu">order</span>(anad_univ_removed<span class="sc">$</span>X142, <span class="at">decreasing =</span> <span class="cn">TRUE</span>),], <span class="dv">10</span>)</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="fu">row.names</span>(sorted_2nd_choice) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>sorted_3rd_choice <span class="ot">&lt;-</span> <span class="fu">head</span>(anad_univ_removed[<span class="fu">order</span>(anad_univ_removed<span class="sc">$</span>X143, <span class="at">decreasing =</span> <span class="cn">TRUE</span>),], <span class="dv">10</span>)</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a><span class="fu">row.names</span>(sorted_3rd_choice) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>filter_exp_1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"university"</span>, <span class="st">"faculty"</span>, <span class="st">"department"</span>, <span class="st">"X141"</span>)</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>filter_exp_2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"university"</span>, <span class="st">"faculty"</span>, <span class="st">"department"</span>, <span class="st">"X142"</span>)</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>filter_exp_3 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"university"</span>, <span class="st">"faculty"</span>, <span class="st">"department"</span>, <span class="st">"X143"</span>)</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>first_filtered <span class="ot">&lt;-</span> sorted_1st_choice[filter_exp_1]</span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(first_filtered) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"university"</span>, <span class="st">"faculty"</span>, <span class="st">"department"</span>, <span class="st">"number_of_1st_choice"</span>)</span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"1st Choice Without Anadolu University: "</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>1st Choice Without Anadolu University: </code></pre>
+</div>
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(first_filtered)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 24%">
+<col style="width: 37%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">university</th>
+<th style="text-align: left;">faculty</th>
+<th style="text-align: left;">department</th>
+<th style="text-align: right;">number_of_1st_choice</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Istanbul Technical University</td>
+<td style="text-align: left;">Faculty of Computer and Informatics</td>
+<td style="text-align: left;">Artificial Intelligence and Data Engineering (English)</td>
+<td style="text-align: right;">5835</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Hacettepe University</td>
+<td style="text-align: left;">Engineering faculty</td>
+<td style="text-align: left;">Artificial Intelligence Engineering(English)</td>
+<td style="text-align: right;">4579</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ankara University</td>
+<td style="text-align: left;">Faculty of Law</td>
+<td style="text-align: left;">Law</td>
+<td style="text-align: right;">4435</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Mugla Sitki Kocman University</td>
+<td style="text-align: left;">Faculty of Dentistry</td>
+<td style="text-align: left;">Dentist</td>
+<td style="text-align: right;">3365</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ankara University</td>
+<td style="text-align: left;">Faculty of Law</td>
+<td style="text-align: left;">Law</td>
+<td style="text-align: right;">3352</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ankara University</td>
+<td style="text-align: left;">Faculty of Law</td>
+<td style="text-align: left;">Law</td>
+<td style="text-align: right;">3258</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Istanbul University</td>
+<td style="text-align: left;">Open and Distance Education Faculty</td>
+<td style="text-align: left;">Child Development (My Academia)</td>
+<td style="text-align: right;">2971</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Bolu Abant Izzet Baysal University</td>
+<td style="text-align: left;">Faculty of Health Sciences</td>
+<td style="text-align: left;">Nursing (Faculty)</td>
+<td style="text-align: right;">2938</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ankara Haci Bayram Veli University</td>
+<td style="text-align: left;">Faculty of Literature</td>
+<td style="text-align: left;">psychology</td>
+<td style="text-align: right;">2585</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Istanbul University</td>
+<td style="text-align: left;">Open and Distance Education Faculty</td>
+<td style="text-align: left;">Child Development (My Academia)</td>
+<td style="text-align: right;">2564</td>
+</tr>
+</tbody>
+</table>
+</div>
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>second_filtered <span class="ot">&lt;-</span> sorted_2nd_choice[filter_exp_2]</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(second_filtered) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"university"</span>, <span class="st">"faculty"</span>, <span class="st">"department"</span>, <span class="st">"number_of_2nd_choice"</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"2nd Choice Without Anadolu University: "</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>2nd Choice Without Anadolu University: </code></pre>
+</div>
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(second_filtered)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 29%">
+<col style="width: 20%">
+<col style="width: 34%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">university</th>
+<th style="text-align: left;">faculty</th>
+<th style="text-align: left;">department</th>
+<th style="text-align: right;">number_of_2nd_choice</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Istanbul University</td>
+<td style="text-align: left;">Faculty of Law</td>
+<td style="text-align: left;">Law</td>
+<td style="text-align: right;">2317</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ataturk University</td>
+<td style="text-align: left;">Distance education faculty</td>
+<td style="text-align: left;">Public Relations and Publicity (Acikogretim)</td>
+<td style="text-align: right;">2217</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Istanbul University</td>
+<td style="text-align: left;">Faculty of Law</td>
+<td style="text-align: left;">Law</td>
+<td style="text-align: right;">2174</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ataturk University</td>
+<td style="text-align: left;">Distance education faculty</td>
+<td style="text-align: left;">Public Relations and Publicity (Acikogretim)</td>
+<td style="text-align: right;">2162</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Yalova University</td>
+<td style="text-align: left;">Faculty of Health Sciences</td>
+<td style="text-align: left;">Nursing (Faculty)</td>
+<td style="text-align: right;">1998</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ataturk University</td>
+<td style="text-align: left;">Distance education faculty</td>
+<td style="text-align: left;">Child Development (My Academia)</td>
+<td style="text-align: right;">1936</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Istanbul University</td>
+<td style="text-align: left;">Faculty of Law</td>
+<td style="text-align: left;">Law</td>
+<td style="text-align: right;">1907</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Sakarya University of Applied Sciences</td>
+<td style="text-align: left;">Faculty of Health Sciences</td>
+<td style="text-align: left;">Nursing (Faculty)</td>
+<td style="text-align: right;">1907</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Bartin University</td>
+<td style="text-align: left;">Faculty of Health Sciences</td>
+<td style="text-align: left;">Nursing (Faculty)</td>
+<td style="text-align: right;">1851</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Hacettepe University</td>
+<td style="text-align: left;">Faculty of Law</td>
+<td style="text-align: left;">Law</td>
+<td style="text-align: right;">1833</td>
+</tr>
+</tbody>
+</table>
+</div>
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>third_filtered <span class="ot">&lt;-</span> sorted_3rd_choice[filter_exp_3]</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(third_filtered) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"university"</span>, <span class="st">"faculty"</span>, <span class="st">"department"</span>, <span class="st">"number_of_3rd_choice"</span>)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"3rd Choice Without Anadolu University: "</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>3rd Choice Without Anadolu University: </code></pre>
+</div>
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(third_filtered)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 44%">
+<col style="width: 22%">
+<col style="width: 15%">
+<col style="width: 17%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">university</th>
+<th style="text-align: left;">faculty</th>
+<th style="text-align: left;">department</th>
+<th style="text-align: right;">number_of_3rd_choice</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Marmara University</td>
+<td style="text-align: left;">Faculty of Law</td>
+<td style="text-align: left;">Law</td>
+<td style="text-align: right;">1745</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Hacettepe University</td>
+<td style="text-align: left;">Faculty of Law</td>
+<td style="text-align: left;">Law</td>
+<td style="text-align: right;">1613</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Yalova University</td>
+<td style="text-align: left;">Faculty of Health Sciences</td>
+<td style="text-align: left;">Nursing (Faculty)</td>
+<td style="text-align: right;">1581</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Marmara University</td>
+<td style="text-align: left;">Faculty of Law</td>
+<td style="text-align: left;">Law</td>
+<td style="text-align: right;">1557</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ankara Haci Bayram Veli University</td>
+<td style="text-align: left;">Faculty of Law</td>
+<td style="text-align: left;">Law</td>
+<td style="text-align: right;">1476</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Hacettepe University</td>
+<td style="text-align: left;">Faculty of Law</td>
+<td style="text-align: left;">Law</td>
+<td style="text-align: right;">1475</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Sakarya University of Applied Sciences</td>
+<td style="text-align: left;">Faculty of Health Sciences</td>
+<td style="text-align: left;">Nursing (Faculty)</td>
+<td style="text-align: right;">1409</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Marmara University</td>
+<td style="text-align: left;">Faculty of Law</td>
+<td style="text-align: left;">Law</td>
+<td style="text-align: right;">1360</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Gaziantep Islamic Science and Technology University</td>
+<td style="text-align: left;">Faculty of Health Sciences</td>
+<td style="text-align: left;">Nursing (Faculty)</td>
+<td style="text-align: right;">1305</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Bolu Abant Izzet Baysal University</td>
+<td style="text-align: left;">Faculty of Health Sciences</td>
+<td style="text-align: left;">Nursing (Faculty)</td>
+<td style="text-align: right;">1226</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="highest-score-of-placed-students" class="level2">
+<h2 class="anchored" data-anchor-id="highest-score-of-placed-students">3.4 Highest Score of Placed Students</h2>
+<p>Highest score of placed Students’ plays an important role in the success and the popularitiy of the university. Below I will show an analysis about the most successful students’ based on the university. By examining this, we will get a chance to learn the most successful universities in Turkey.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>orig_data <span class="ot">&lt;-</span> <span class="fu">list_score</span>(<span class="at">department_names =</span> <span class="st">"all"</span>)</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>orig_data <span class="ot">&lt;-</span> orig_data[orig_data<span class="sc">$</span>X16 <span class="sc">!=</span> <span class="st">"---"</span>,]</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>orig_data<span class="sc">$</span>X16 <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">","</span>, <span class="st">"."</span>, orig_data<span class="sc">$</span>X16))</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>highest_score_student <span class="ot">&lt;-</span> orig_data <span class="sc">%&gt;%</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(university) <span class="sc">%&gt;%</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">average_score =</span> <span class="fu">mean</span>(X16))</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(highest_score_student[<span class="fu">order</span>(highest_score_student<span class="sc">$</span>average_score, <span class="at">decreasing =</span> <span class="cn">TRUE</span>),], <span class="dv">20</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">university</th>
+<th style="text-align: right;">average_score</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Kahramanmaras Istiklal University</td>
+<td style="text-align: right;">518.2002</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Koc University</td>
+<td style="text-align: right;">503.5906</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Bogazici University</td>
+<td style="text-align: right;">501.3600</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Galatasaray University</td>
+<td style="text-align: right;">497.0893</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Sabanci University</td>
+<td style="text-align: right;">471.8384</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Bilkent University</td>
+<td style="text-align: right;">463.7294</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ibn Haldun University</td>
+<td style="text-align: right;">454.7687</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Istanbul Technical University</td>
+<td style="text-align: right;">449.4620</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Abdullah Gul University</td>
+<td style="text-align: right;">447.3032</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Turkish-German University</td>
+<td style="text-align: right;">440.8571</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Middle East Technical University</td>
+<td style="text-align: right;">438.4576</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ozyegin University</td>
+<td style="text-align: right;">437.6093</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Tobb Etu University of Economics and Technology</td>
+<td style="text-align: right;">433.9931</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Yildiz Technical University</td>
+<td style="text-align: right;">430.2158</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Hacettepe University</td>
+<td style="text-align: right;">426.0542</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Istanbul University</td>
+<td style="text-align: right;">422.8258</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">University of Health Sciences</td>
+<td style="text-align: right;">420.8505</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Izmir Institue of Technology</td>
+<td style="text-align: right;">418.7312</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Bezmi Alem Vakif University</td>
+<td style="text-align: right;">416.7021</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ankara Medipol University</td>
+<td style="text-align: right;">416.4196</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="number-of-professors-in-universities" class="level2">
+<h2 class="anchored" data-anchor-id="number-of-professors-in-universities">3.5 Number of Professors in Universities</h2>
+<p>While examining the status of a university, the number of professors and associate professors is so important. Professors are so experienced and students and other lecturers can learn so much information in a short time. By examining the numbers, we can contruct a relationship with the success and the popularity of the universities.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>orig_data <span class="ot">&lt;-</span> <span class="fu">list_score</span>(<span class="at">department_names =</span> <span class="st">"all"</span>)</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>orig_data<span class="sc">$</span>prof_plus_assoc_prof <span class="ot">&lt;-</span> orig_data<span class="sc">$</span>X188 <span class="sc">+</span> orig_data<span class="sc">$</span>X189</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>highest_prof_num <span class="ot">&lt;-</span> orig_data <span class="sc">%&gt;%</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(university) <span class="sc">%&gt;%</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">average_prof =</span> <span class="fu">mean</span>(prof_plus_assoc_prof))</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(highest_prof_num[<span class="fu">order</span>(highest_prof_num<span class="sc">$</span>average_prof, <span class="at">decreasing =</span> <span class="cn">TRUE</span>),], <span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">university</th>
+<th style="text-align: right;">average_prof</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Istanbul University-Cerrahpasa</td>
+<td style="text-align: right;">27.22047</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Gazi University</td>
+<td style="text-align: right;">24.98565</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Istanbul University</td>
+<td style="text-align: right;">23.86131</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ankara University</td>
+<td style="text-align: right;">20.30030</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Hacettepe University</td>
+<td style="text-align: right;">19.91561</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ege University</td>
+<td style="text-align: right;">16.93665</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ankara Yıldırım Beyazıt University</td>
+<td style="text-align: right;">16.27826</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Istanbul Technical University</td>
+<td style="text-align: right;">15.71569</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Marmara University</td>
+<td style="text-align: right;">13.45520</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Yildiz Technical University</td>
+<td style="text-align: right;">12.80473</td>
+</tr>
+</tbody>
+</table>
+</div>
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"The Worst Universities Based on the Number of Professors and Associate Professors: "</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>The Worst Universities Based on the Number of Professors and Associate Professors: </code></pre>
+</div>
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(highest_prof_num[<span class="fu">order</span>(highest_prof_num<span class="sc">$</span>average_prof, <span class="at">decreasing =</span> <span class="cn">FALSE</span>),], <span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">university</th>
+<th style="text-align: right;">average_prof</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Kahramanmaras Istiklal University</td>
+<td style="text-align: right;">0.0000000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ankara Science University</td>
+<td style="text-align: right;">0.1785714</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Cappadocia University</td>
+<td style="text-align: right;">0.2054795</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ankara Medipol University</td>
+<td style="text-align: right;">0.3269231</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Antalya Akev University</td>
+<td style="text-align: right;">0.3333333</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Alanya Hamdullah Emin Pasa University</td>
+<td style="text-align: right;">0.3666667</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Beykoz University</td>
+<td style="text-align: right;">0.4021739</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Istanbul Gelisim University</td>
+<td style="text-align: right;">0.4407295</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Hakkari University</td>
+<td style="text-align: right;">0.4482759</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Nisantasi University</td>
+<td style="text-align: right;">0.5279188</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</section>
+<section id="results-and-last-discussions" class="level1">
+<h1>4 Results and Last Discussions</h1>
+<p>Universities are so important in many aspects. Any doctor, engineer, teacher, lecturer etc. comes from these organisations. Analyzing the status of these is so helpful to understand many things at a first glance. This work is just a beginning of such a complete work. Data contains almost 200 different information and here the most important information is examined. Many organizations and regulations and much more can be done with these informations. I hope this small work helped to understand the different aspects of our universities.</p>
+
+
 </section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
